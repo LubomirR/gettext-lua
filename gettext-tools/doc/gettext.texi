@@ -8967,6 +8967,7 @@ strings.
 * qt-plural-format::            Qt Plural Format Strings
 * kde-format::                  KDE Format Strings
 * boost-format::                Boost Format Strings
+* lua-format::                  Lua Format Strings
 @end menu
 
 @node c-format, objc-format, Translators for other Languages, Translators for other Languages
@@ -9332,6 +9333,7 @@ that language, and to combine the resulting files using @code{msgcat}.
 * PHP::                         PHP Hypertext Preprocessor
 * Pike::                        Pike
 * GCC-source::                  GNU Compiler Collection sources
+* Lua::                         Lua
 @end menu
 
 @node C, sh, List of Programming Languages, List of Programming Languages
@@ -11817,7 +11819,7 @@ lua
 
 @item ...
 
-@end itemsize
+@end itemize
 
 @item gettext shorthand
 @code{_("abc")}
