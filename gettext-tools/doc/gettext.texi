@@ -11795,7 +11795,7 @@ yes
 @end table
 
 @node Lua,  , GCC-source, List of Programming Languages
-@subsection 
+@subsection Lua
 
 @table @asis
 @item RPMs
@@ -11813,9 +11813,9 @@ lua
 
 @item @code{[[abc]]}
 
-@item @code{"[=[abc]=]"}
+@item @code{[=[abc]=]}
 
-@item @code{"[==[abc]==]"}
+@item @code{[==[abc]==]}
 
 @item ...
 
