@@ -1065,6 +1065,8 @@ extract_balanced (message_list_ty * mlp, token_type_ty delim,
     keyword_found
   } state;
 
+  state = no_keyword;
+
   token_ty tok;
 
   /* Context iterator that will be used if the next token is a '('.  */
@@ -1116,7 +1118,7 @@ extract_balanced (message_list_ty * mlp, token_type_ty delim,
               return true;
             }
           next_context_iter = null_context_list_iterator;
-          state = 0;
+          state = no_keyword;
           break;
 
         case token_type_rparen:
@@ -1144,7 +1146,7 @@ extract_balanced (message_list_ty * mlp, token_type_ty delim,
               return true;
             }
           next_context_iter = null_context_list_iterator;
-          state = 0;
+          state = no_keyword;
           break;
 
         case token_type_rbracket:
@@ -1209,7 +1211,7 @@ extract_balanced (message_list_ty * mlp, token_type_ty delim,
         }
         drop_reference (tok.comment);
         next_context_iter = null_context_list_iterator;
-        state = 0;
+        state = no_keyword;
         continue;
 
         case token_type_dot:

@@ -52,7 +52,7 @@ msgid "Brackets are awesome!"
 msgstr ""
 
 msgid "yep"
-msgstr "trollface.jpg"
+msgstr ""
 EOF
 
 : ${DIFF=diff}
