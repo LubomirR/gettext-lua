@@ -7,6 +7,7 @@
 tmpfiles=""
 trap 'rm -fr $tmpfiles' 1 2 3 15
 
+tmpfiles="$tmpfiles prog.lua"
 cat <<\EOF > prog.lua
 require("gettext")
 gettext.bindtextdomain("prog", ".")
@@ -53,7 +54,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "'Your command, please?', asked the waiter."
-msgstr "ï¿½Votre commande, s'il vous plaitï¿½, dit le garï¿½on."
+msgstr "«Votre commande, s'il vous plait», dit le garçon."
 
 #, lua-format
 msgid "a piece of cake"
@@ -127,7 +128,7 @@ fi
 tmpfiles="$tmpfiles prog.ok prog.oku prog.out"
 : ${DIFF=diff}
 cat <<\EOF > prog.ok
-ï¿½Votre commande, s'il vous plaitï¿½, dit le garï¿½on.
+«Votre commande, s'il vous plait», dit le garçon.
 42 morceaux de gateau
 FF remplace EUR.
 EOF
