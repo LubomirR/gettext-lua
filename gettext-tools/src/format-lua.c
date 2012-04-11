@@ -31,6 +31,31 @@
 
 #define _(str) gettext (str)
 
+/* The Lua format strings are described in the Lua manual,
+   which can be found at:
+   http://www.lua.org/manual/5.2/manual.html
+
+   A directive
+   - starts with '%'
+   - is optionally followed by any of the characters '0', '-', ' ', or
+     each of which acts as a flag,
+   - is optionally followed by a width specification: a nonempty digit
+     sequence,
+   - is optionally followed by '.' and a precision specification: a nonempty
+     digit sequence,
+   - is finished by a specifier
+       - 's', 'q', that needs a string argument,
+       - 'd', 'i', 'o', 'u', 'X', 'x', that need an integer argument,
+       - 'A', 'a', 'E', 'e', 'f', 'G', 'g', that need a floating-point argument,
+       - 'c', that needs a character argument.
+   Additionally there is the directive '%%', which takes no argument.
+
+   Note: Lua does not distinguish between integer, floating-point
+   and character arguments, since it has a number data type only.
+   However, we should not allow users to use %d instead of %c.
+   The same applies to %s and %q - we should not allow intermixing them.
+ */
+
 enum format_arg_type
 {
   FAT_INTEGER,
@@ -112,6 +137,8 @@ format_parse (const char *format, bool translated, char *fdi,
                 case 'x':
                   type = FAT_INTEGER;
                   break;
+                case 'a':
+                case 'A':
                 case 'E':
                 case 'e':
                 case 'f':

@@ -39,6 +39,10 @@
 
 #define SIZEOF(a) (sizeof(a) / sizeof(a[0]))
 
+/* The Lua syntax is defined in the Lua manual §9,
+   which can be found at
+   http://www.lua.org/manual/5.2/manual.html#9  */
+
 /* If true extract all strings.  */
 static bool extract_all = false;
 
