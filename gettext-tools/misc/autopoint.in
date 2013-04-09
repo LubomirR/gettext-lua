@@ -30,6 +30,8 @@ prefix="@prefix@"
 datarootdir="@datarootdir@"
 gettext_dir="@datadir@/gettext"
 
+autom4te="autom4te --no-cache --language=Autoconf-without-aclocal-m4"
+
 # func_tmpdir
 # creates a temporary directory.
 # Sets variable
@@ -69,18 +71,7 @@ func_find_curr_installdir ()
   case "$curr_executable" in
     */* | *\\*) ;;
     *) # Need to look in the PATH.
-      if test "${PATH_SEPARATOR+set}" != set; then
-        func_tmpdir
-        { echo "#! /bin/sh"; echo "exit 0"; } > "$tmp"/conf.sh
-        chmod +x "$tmp"/conf.sh
-        if (PATH="/nonexistent;$tmp"; conf.sh) >/dev/null 2>&1; then
-          PATH_SEPARATOR=';'
-        else
-          PATH_SEPARATOR=:
-        fi
-        rm -rf "$tmp"
-      fi
-      save_IFS="$IFS"; IFS="$PATH_SEPARATOR"
+      save_IFS="$IFS"; IFS="${PATH_SEPARATOR='@PATH_SEPARATOR@'}"
       for dir in $PATH; do
         IFS="$save_IFS"
         test -z "$dir" && dir=.
@@ -267,9 +258,15 @@ fi
 
 # Check whether the -V option and the version number in configure.in match.
 # At least one of the two must be given. If both are given, they must agree.
-sed_extract_AM_GNU_GETTEXT_VERSION_argument='s/^AM_GNU_GETTEXT_VERSION(\([^()]*\)).*$/\1/'
-sed_remove_outer_brackets='s/^\[\(.*\)\]$/\1/'
-xver=`cat "$configure_in" | grep '^AM_GNU_GETTEXT_VERSION(' | sed -n -e "$sed_extract_AM_GNU_GETTEXT_VERSION_argument"p | sed -e "$sed_remove_outer_brackets" | sed -e 1q`
+sed_extract_AM_GNU_GETTEXT_VERSION_argument='
+s,#.*$,,; s,^dnl .*$,,; s, dnl .*$,,;
+/AM_GNU_GETTEXT_VERSION/ {
+    s,^.*AM_GNU_GETTEXT_VERSION(\([^()]*\)).*$,xver=\1,
+    s,^xver=\[\(.*\)\]$,xver=\1,
+    p
+}
+d'
+eval `sed "$sed_extract_AM_GNU_GETTEXT_VERSION_argument" "$configure_in"`
 if test -z "$xver" && test -f intl/VERSION; then
   xver=`cat intl/VERSION | LC_ALL=C sed -n -e 's/^.*gettext-\([-+_.0-9A-Za-z]*\).*$/\1/p'`
 fi
@@ -297,7 +294,7 @@ case "$ver" in
   0.15 | \
   0.16 | 0.16.1 | \
   0.17 | \
-  0.18 | 0.18.1 )
+  0.18 | 0.18.1 | 0.18.2 )
     ;;
   *)
     func_fatal_error "The AM_GNU_GETTEXT_VERSION declaration in your $configure_in
@@ -307,14 +304,22 @@ case "$ver" in
 esac
 
 # Check in which directory config.rpath, mkinstalldirs etc. belong.
-auxdir=`cat "$configure_in" | grep '^AC_CONFIG_AUX_DIR' | sed -n -e 's/AC_CONFIG_AUX_DIR(\([^()]*\))/\1/p' | sed -e 's/^\[\(.*\)\]$/\1/' | sed -e 1q`
+auxdir=`$autom4te --trace=AC_CONFIG_AUX_DIR:\$% "$configure_in"`
 if test -n "$auxdir"; then
   auxdir="$auxdir/"
 fi
 
 # Check in which directory the *.m4 macros belong.
-m4dir=m4
-if test -f Makefile.am; then
+macrodirs=`$autom4te --trace=AC_CONFIG_MACRO_DIR_TRACE:\$% "$configure_in"`
+if test -z "$macrodirs"; then
+  macrodirs=`$autom4te --trace=AC_CONFIG_MACRO_DIR:\$% "$configure_in"`
+fi
+for arg in $macrodirs; do
+  m4dir="$arg"
+  break
+done
+
+if test -z "$m4dir" && test -f Makefile.am; then
   # A package using automake.
   # Extract the macro directory name from Makefile.am.
   aclocal_amflags=`grep '^ACLOCAL_AMFLAGS[ 	]*=' Makefile.am | sed -e 's/^ACLOCAL_AMFLAGS[ 	]*=\(.*\)$/\1/'`

@@ -4,7 +4,8 @@
 # also regenerates all aclocal.m4, config.h.in, Makefile.in, configure files
 # with new versions of autoconf or automake.
 #
-# This script requires autoconf-2.60..2.68 and automake-1.11.1 in the PATH.
+# This script requires autoconf-2.60..2.69 and automake-1.11.1..1.12 in the
+# PATH.
 # It also requires either
 #   - the GNULIB_TOOL environment variable pointing to the gnulib-tool script
 #     in a gnulib checkout, or
@@ -16,7 +17,7 @@
 #   - the makeinfo program from the texinfo package,
 #   - perl.
 
-# Copyright (C) 2003-2011 Free Software Foundation, Inc.
+# Copyright (C) 2003-2012 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,8 +37,8 @@
 # Usage after a first-time git clone / cvs checkout:   ./autogen.sh
 # Usage after a git clone / cvs update:                ./autogen.sh --quick
 # This uses an up-to-date gnulib checkout.
-# (The gettext-0.18.1 release was prepared using gnulib commit
-# 74d509383fe30bb5511a978b52e4f8ecae37826b from 2010-06-03.)
+# (The gettext-0.18.2 release was prepared using gnulib commit
+# f022473fdaf724d84817c4003120b9a38fbf884b from 2012-12-19.)
 #
 # Usage from a released tarball:             ./autogen.sh --quick --skip-gnulib
 # This does not use a gnulib checkout.
@@ -108,12 +109,13 @@ if ! $skip_gnulib; then
       alloca
       errno
       verify
+      xsize
     '
     GNULIB_MODULES_LIBASPRINTF_OTHER='
     '
     $GNULIB_TOOL --dir=gettext-runtime/libasprintf --source-base=. --m4-base=gnulib-m4 --lgpl=2 --makefile-name=Makefile.gnulib --libtool --local-dir=gnulib-local --local-symlink \
       --import $GNULIB_MODULES_LIBASPRINTF $GNULIB_MODULES_LIBASPRINTF_OTHER
-    $GNULIB_TOOL --copy-file m4/intmax_t.m4 gettext-runtime/m4/intmax_t.m4
+    $GNULIB_TOOL --copy-file m4/intmax_t.m4 gettext-runtime/libasprintf/gnulib-m4/intmax_t.m4
     # In gettext-tools:
     GNULIB_MODULES_TOOLS_FOR_SRC='
       alloca-opt
@@ -220,6 +222,7 @@ if ! $skip_gnulib; then
       extensions
       gettext-h
       include_next
+      locale
       localcharset
       malloc-posix
       mbrtowc
@@ -250,8 +253,15 @@ if ! $skip_gnulib; then
       javaexec-script
       stdint
     '
+    GNULIB_MODULES_TOOLS_LIBUNISTRING_TESTS='
+      unilbrk/u8-possible-linebreaks-tests
+      unilbrk/ulc-width-linebreaks-tests
+      unistr/u8-mbtouc-tests
+      unistr/u8-mbtouc-unsafe-tests
+      uniwidth/width-tests
+    '
     $GNULIB_TOOL --dir=gettext-tools --lib=libgettextlib --source-base=gnulib-lib --m4-base=gnulib-m4 --tests-base=gnulib-tests --makefile-name=Makefile.gnulib --libtool --with-tests --local-dir=gnulib-local --local-symlink \
-      --import --avoid=hash-tests $GNULIB_MODULES_TOOLS_FOR_SRC $GNULIB_MODULES_TOOLS_FOR_SRC_COMMON_DEPENDENCIES $GNULIB_MODULES_TOOLS_OTHER
+      --import --avoid=hash-tests `for m in $GNULIB_MODULES_TOOLS_LIBUNISTRING_TESTS; do echo --avoid=$m; done` $GNULIB_MODULES_TOOLS_FOR_SRC $GNULIB_MODULES_TOOLS_FOR_SRC_COMMON_DEPENDENCIES $GNULIB_MODULES_TOOLS_OTHER
     # In gettext-tools/libgrep:
     GNULIB_MODULES_TOOLS_FOR_LIBGREP='
       mbrlen
@@ -263,6 +273,7 @@ if ! $skip_gnulib; then
     # This is a subset of the GNULIB_MODULES_FOR_SRC.
     GNULIB_MODULES_LIBGETTEXTPO='
       basename
+      close
       c-ctype
       c-strcase
       c-strstr

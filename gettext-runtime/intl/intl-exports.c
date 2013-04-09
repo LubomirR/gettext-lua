@@ -16,7 +16,11 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
  /* IMP(x) is a symbol that contains the address of x.  */
-#define IMP(x) _imp__##x
+#if USER_LABEL_PREFIX_UNDERSCORE
+# define IMP(x) _imp__##x
+#else
+# define IMP(x) __imp_##x
+#endif
 
  /* Ensure that the variable x is exported from the library, and that a
     pseudo-variable IMP(x) is available.  */

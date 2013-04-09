@@ -1,3 +1,141 @@
+2013-03-05  Daiki Ueno  <ueno@gnu.org>
+
+	* verify.h: Update copyright year.
+	* xsize.h: Likewise.
+
+2013-02-25  Daiki Ueno  <ueno@gnu.org>
+
+	Determine imported C symbol prefix at configure time.
+	Suggested by Evgeny Grin in <http://savannah.gnu.org/bugs/?29946>.
+	* intl-exports.c (IMP): Define depending on the result of the
+	configure run.
+
+2013-01-21  Daiki Ueno  <ueno@gnu.org>
+
+	Remove references to non-existing COPYING.LIB-2.*.
+	Reported by Christian Weisgerber <naddy@mips.inka.de>.
+	* Makefile.in (DISTFILES.obsolete): Add COPYING.LIB-2.*.
+	(install-data): Install COPYING.LIB instead of no longer existing
+	COPYING.LIB-2.*.
+	(uninstall): Remove COPYING.LIB instead of no longer existing
+	COPYING.LIB-2.*.
+
+2013-01-17  Daiki Ueno  <ueno@gnu.org>
+
+	Fix link errors related to C99-style extern inline.
+	Reported by Sam Thursfield <sam.thursfield@codethink.co.uk>.
+	* Makefile.in (SOURCES): Add xsize.c.
+	(OBJECTS): Add xsize.$lo.
+	(xsize.lo): New rule.
+	(printf.$lo): Add xsize.c to dependencies.
+	* xsize.c: New file, imported from gnulib.
+
+2012-12-25  Daiki Ueno  <ueno@gnu.org>
+
+	* gettext-0.18.2 released.
+
+2012-12-25  Daiki Ueno  <ueno@gnu.org>
+
+	* libgnuintl.in.h (LIBINTL_VERSION): Bump to 0.18.2.
+	* Makefile.in (LTV_CURRENT, LTV_REVISION, LTV_AGE): Bump to 9:2:1.
+
+2012-12-25  Daiki Ueno  <ueno@gnu.org>
+
+	* intl-exports.c (IMP): Check __MINGW32__ as well as _WIN64.
+
+2012-12-20  Daiki Ueno  <ueno@gnu.org>
+
+	localecharset: respect the thread-specific locale on Mac OS X
+	* lib/localcharset.c (locale_charset) [DARWIN7]: Use MB_CUR_MAX_L
+	instead of MB_CUR_MAX.
+
+2012-12-21  Daiki Ueno  <ueno@gnu.org>
+
+	Fix W64 build errors.
+	* intl-exports.c (IMP) [_WIN64]: Prefix "__imp_" instead of
+	"_imp__".
+	* osdep.c: Include intl-exports.c on mingw as well as Cygwin.
+
+2012-12-10  Daiki Ueno  <ueno@unixuser.org>
+
+	* intl-compat.c: Fix typo in the copyright header.
+
+2012-11-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* vasnprintf.c (MAX_ROOM_NEEDED): Now static, not static
+	inline.
+
+2012-11-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lock.c (gl_waitqueue_init)
+	(gl_waitqueue_notify_first, gl_waitqueue_notify_all):
+	Change 'static inline' to 'inline'.
+
+2012-09-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	localename: port gl_locale_name_thread_unsafe to FreeBSD
+	* localename.c (gl_locale_name_thread_unsafe): Port to FreeBSD,
+	and use the simpler FreeBSD implementation on Mac OS X as well.
+	Original idea suggested by Ed Maste in
+	<http://lists.gnu.org/archive/html/bug-gnulib/2012-09/msg00094.html>.
+
+2012-09-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* xsize.h (XSIZE_INLINE): New macro.  Replace all uses of
+	'static inline' with them.  Use _GL_INLINE_HEADER_BEGIN,
+	_GL_INLINE_HEADER_END.
+
+2012-09-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	misc: don't limit commentary to inline functions
+	* xsize.h: Contrast macros to functions in general, not just
+	to inline functions, when the commentary does not apply only to
+	inline functions.
+
+2012-09-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	localcharset: work around Mac OS X bug with UTF-8 and MB_CUR_MAX
+	* localcharset.c (locale_charset) [DARWIN7]:
+	Return "ASCII" if the system reports "UTF-8" and MB_CUR_MAX <= 1,
+	as these two values are incompatible.  Problem reported by Max Horn.
+	For more discussion, please see
+	<http://lists.gnu.org/archive/html/bug-gnulib/2012-09/msg00061.html>.
+
+2012-07-20  Eric Blake  <eblake@redhat.com>
+
+	verify: document conflict with -Wnested-externs
+	* verify.h: Give hint about usage when gcc warnings are enabled.
+
+2012-06-22  Bruno Haible  <bruno@clisp.org>
+
+	Write "Mac OS X" instead of "MacOS X".
+	* config.charset: Write "Mac OS X" instead of "MacOS X".
+	* localcharset.c: Likewise.
+	* localename.c: Likewise.
+	* vasnprintf.c: Likewise.
+
+2012-06-03  Jim Meyering  <jim@meyering.net>
+
+	* dcigettext.c: Spelling fixes.
+
+2012-02-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* vasnprintf.c: Spelling fixes.
+
+2012-01-26  Bruno Haible  <bruno@clisp.org>
+
+	Modernize quoting.
+	* Makefile.in: Quote 'like this', not `like this', as per the recent
+	change to the GNU coding standards.
+	* libgnuintl.in.h: Likewise.
+	* vasnprintf.h: Likewise.
+
+2012-01-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	doc: C11 and C++11 are now official
+	* verify.h: Replace references to draft C1X to C11, and to draft C++0X
+	to C++11.
+
 2012-01-06  Bruno Haible  <bruno@clisp.org>
 
 	Talk about "native Windows API", not "Woe32".
@@ -9,6 +147,13 @@
 
 	Talk about "native Windows API", not "Win32".
 	* vasnprintf.c: Update comments to mention native Windows.
+	* localcharset.c: Update comments to mention native Windows.
+	(WINDOWS_NATIVE): Renamed from WIN32_NATIVE.
+	* localename.c: Likewise.
+	* relocatable.c: Likewise.
+	* lock.h: Update comments to mention native Windows.
+	(USE_WINDOWS_THREADS): Renamed from USE_WIN32_THREADS.
+	* lock.c (USE_WINDOWS_THREADS): Renamed from USE_WIN32_THREADS.
 
 2011-10-15  Bruno Haible  <bruno@clisp.org>
 
@@ -128,6 +273,11 @@
 	7 preallocated elements in an 'arguments' or 'DIRECTIVES' struct.
 	* vasnprintf.c (VASNPRINTF): Update memory handling code.
 	Reported by Pádraig Brady <P@draigbrady.com>.
+
+2011-01-01  Jim Meyering  <meyering@redhat.com>
+
+	maint: update almost all copyright ranges to include 2011
+	Run the new "make update-copyright" rule.
 
 2010-11-20  Bruno Haible  <bruno@clisp.org>
 
@@ -1347,7 +1497,7 @@
 2007-03-24  Bruno Haible  <bruno@clisp.org>
 
 	* vasnprintf.c: Include float+.h.
-	(VASNPRINTF): When comparing agains +0.0L or +0.0, compare only
+	(VASNPRINTF): When comparing against +0.0L or +0.0, compare only
 	SIZEOF_LDBL or SIZEOF_DBL bytes.
 
 2007-03-24  Bruno Haible  <bruno@clisp.org>
@@ -4153,7 +4303,7 @@
 	* intl/localealias.c (read_alias_file): Use unsigned char for
 	local variables.  Remove unused variable tp.
 	* intl/l10nflist.c (_nl_normalize_codeset): Use unsigned char *
-	for type of codeset.  For loosing Solaris systems.
+	for type of codeset.  For losing Solaris systems.
 	* intl/loadinfo.h: Adapt prototype of _nl_normalize_codeset.
 	* intl/bindtextdom.c (BINDTEXTDOMAIN): Don't define local variable
 	len if not needed.
